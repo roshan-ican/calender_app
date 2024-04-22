@@ -1,0 +1,77 @@
+import Router, { useRouter } from 'next/router';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { Routes } from '@/config/routes';
+import { API_ENDPOINTS } from './client/api-endpoints';
+import { GetParams, {{pascalCase name}}, QueryOptions, {{pascalCase name}}QueryOptions, {{pascalCase name}}Paginator } from '@/types';
+import { {{pascalCase name}}Client } from '@/data/client/{{dashCase name}}';
+
+export const useCreate{{pascalCase name}}Mutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({{pascalCase name}}Client.create, {
+    onSuccess: async () => {
+      toast.success('{{pascalCase name}} Created Successfully');
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.{{constantCase name}});
+    },
+  });
+};
+
+export const useDelete{{pascalCase name}}Mutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({{pascalCase name}}Client.delete, {
+    onSuccess: () => {
+      toast.success('{{pascalCase name}} Deleted Successfully');
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.{{constantCase name}});
+    },
+  });
+};
+
+export const useUpdate{{pascalCase name}}Mutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({{pascalCase name}}Client.update, {
+    onSuccess: () => {
+      toast.success('{{pascalCase name}} Updated Successfully');
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.{{constantCase name}});
+    },
+  });
+};
+
+export const use{{pascalCase name}}Query = ({ slug }: GetParams) => {
+  const { data, error, isLoading } = useQuery<{{pascalCase name}}, Error>([API_ENDPOINTS.{{constantCase name}}, { slug }], () =>
+    {{pascalCase name}}Client.get({ slug })
+  );
+
+  return {
+    {{pascalCase name}}: data,
+    error,
+    loading: isLoading,
+  };
+};
+
+export const use{{pascalCase name}}sQuery = (options?: Partial<{{pascalCase name}}QueryOptions>) => {
+  const { data, error, isLoading } = useQuery<{{pascalCase name}}Paginator, Error>(
+    [API_ENDPOINTS.{{constantCase name}}, options],
+    ({ queryKey, pageParam }) => {{pascalCase name}}Client.paginated(Object.assign({}, queryKey[1], pageParam)),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  return {
+    {{pascalCase name}}s: (data && data?.results) ?? [],
+    // paginatorInfo: mapPaginatorData(data),
+    error,
+    loading: isLoading,
+  };
+};

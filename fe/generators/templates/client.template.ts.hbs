@@ -1,0 +1,9 @@
+
+import { crudFactory } from '@/data/client/curd-factory';
+
+import { API_ENDPOINTS } from '@/data/client/api-endpoints';
+import { QueryOptions, {{pascalCase name}}, {{pascalCase name}}Input } from '@/types';
+
+export const serviceClient = {
+  ...crudFactory<{{pascalCase name}}, QueryOptions, {{pascalCase name}}Input>(API_ENDPOINTS.{{constantCase name}}),
+};
